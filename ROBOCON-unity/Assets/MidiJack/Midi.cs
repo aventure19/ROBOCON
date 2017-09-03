@@ -53,16 +53,17 @@ namespace MidiJack
         public byte data1;  // MIDI data bytes
         public byte data2;
 
-        // ï¿½Ü‚ï¿½64ï¿½rï¿½bï¿½gï¿½ÅŽï¿½ï¿½
+        #region MIDIƒƒbƒZ[ƒW‚ÌŽóŽæA•ÏŠ·
+        // ‚Ü‚¸64ƒrƒbƒg‚ÅŽóŽæ
         public MidiMessage(ulong data)
         {
-            // 32ï¿½rï¿½bï¿½gï¿½É•ÏŠï¿½ï¿½Aï¿½@ï¿½ï¿½ï¿½IDï¿½Æ‚ï¿½ï¿½ÄŽï¿½o
+            // 32ƒrƒbƒg‚É•ÏŠ·A‹@Ší‚ÌID‚Æ‚µ‚ÄŽæo
             source = (uint)(data & 0xffffffffUL);
-            // ï¿½Xï¿½eï¿½[ï¿½^ï¿½Xï¿½oï¿½Cï¿½gï¿½iï¿½ï¿½1ï¿½oï¿½Cï¿½gï¿½jï¿½ÌŽï¿½o
+            // ƒXƒe[ƒ^ƒXƒoƒCƒgi‘æ1ƒoƒCƒgj‚ÌŽæo
             status = (byte)((data >> 32) & 0xff);
-            // ï¿½mï¿½[ï¿½gï¿½Ôï¿½ï¿½nï¿½iï¿½ï¿½2ï¿½oï¿½Cï¿½gï¿½jï¿½ÌŽï¿½o
+            // ƒm[ƒg”Ô†Œni‘æ2ƒoƒCƒgj‚ÌŽæo
             data1 = (byte)((data >> 40) & 0xff);
-            // ï¿½xï¿½ï¿½ï¿½Vï¿½eï¿½Bï¿½nï¿½iï¿½ï¿½3ï¿½oï¿½Cï¿½gï¿½jï¿½ÌŽï¿½o
+            // ƒxƒƒVƒeƒBŒni‘æ3ƒoƒCƒgj‚ÌŽæo
             data2 = (byte)((data >> 48) & 0xff);
         }
 

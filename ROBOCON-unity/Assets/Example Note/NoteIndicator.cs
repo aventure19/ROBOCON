@@ -3,6 +3,7 @@ using MidiJack;
 
 public class NoteIndicator : MonoBehaviour
 {
+
     public int noteNumber;
     public float velocity_f = 0.0f;
 

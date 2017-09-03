@@ -190,6 +190,7 @@ namespace MidiJack
             }
         }
 
+        #region MIDIメッセージの処理
 
         void Update()
         {
@@ -216,6 +217,7 @@ namespace MidiJack
                 // Parse the message.
                 var message = new MidiMessage(data);
 
+                indic_group.data = data.ToString("X");
 
                 // Split the first byte.
                 var statusCode = message.status >> 4;
@@ -230,6 +232,10 @@ namespace MidiJack
                     if (noteOnDelegate != null)
                         noteOnDelegate((MidiChannel)channelNumber, message.data1, velocity - 1);
 
+                    indic_group.source = message.source.ToString("X");
+                    indic_group.status = message.status.ToString("X");
+                    indic_group.data1 = message.data1.ToString("X");
+                    indic_group.data2 = message.data2.ToString("X");
                 }
 
                 // Note off message?
@@ -240,6 +246,7 @@ namespace MidiJack
                     if (noteOffDelegate != null)
                         noteOffDelegate((MidiChannel)channelNumber, message.data1);
 
+                    indic_group.status = message.status.ToString("X");
                 }
 
                 // CC message?
