@@ -54,7 +54,11 @@ namespace MidiJack
             // Message history
             temp = "Recent MIDI messages:";
             foreach (var message in MidiDriver.Instance.History)
-                temp += "\n" + message.ToString();
+            {
+                // ‘æ1Byte‚ÉFE(Active Sensing)‚ðŠÜ‚ÞM†‚ðœŠO
+                if (message.ToString().IndexOf("s(FE)") == -1)
+                    temp += "\n" + message.ToString();
+            }
             EditorGUILayout.HelpBox(temp, MessageType.None);
         }
 
@@ -71,7 +75,8 @@ namespace MidiJack
             if (--_countToUpdate > 0) return;
 
             var mcount = MidiDriver.Instance.TotalMessageCount;
-            if (mcount != _lastMessageCount) {
+            if (mcount != _lastMessageCount)
+            {
                 Repaint();
                 _lastMessageCount = mcount;
             }
@@ -83,16 +88,17 @@ namespace MidiJack
 
         #region Native Plugin Interface
 
-        [DllImport("MidiJackPlugin", EntryPoint="MidiJackCountEndpoints")]
+        [DllImport("MidiJackPlugin", EntryPoint = "MidiJackCountEndpoints")]
         static extern int CountEndpoints();
 
-        [DllImport("MidiJackPlugin", EntryPoint="MidiJackGetEndpointIDAtIndex")]
+        [DllImport("MidiJackPlugin", EntryPoint = "MidiJackGetEndpointIDAtIndex")]
         static extern uint GetEndpointIdAtIndex(int index);
 
         [DllImport("MidiJackPlugin")]
         static extern System.IntPtr MidiJackGetEndpointName(uint id);
 
-        static string GetEndpointName(uint id) {
+        static string GetEndpointName(uint id)
+        {
             return Marshal.PtrToStringAnsi(MidiJackGetEndpointName(id));
         }
 

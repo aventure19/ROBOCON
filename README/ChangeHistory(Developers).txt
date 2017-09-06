@@ -1,32 +1,30 @@
 
+
+
+※プログラムの変更や追加、削除等行った場合に日付を含めて注釈を書いてください（上から追加する）。
+
+
+
+
+
+
+
+****************************************************************************
+
+・2017/09/06 author : K.H
+　「Assets\Game」フォルダ追加。
+
+****************************************************************************
+
+・2017/09/06 author : K.H
+　unity-midi-receiverのテストプロジェクトを追加（ROBOCON\[NEW]ROBOCON-unity フォルダ）
+DL元リポジトリ：	https://github.com/keijiro/unity-midi-receiver-test
+
+※今後はこっちをメインに編集していきます。
+
+****************************************************************************
+
 ・2017/09/03 author : K.H
+　MidiJackのテストプロジェクトを追加（ROBOCON\[OLD]ROBOCON-unity フォルダ）
+DL元リポジトリ：	https://github.com/keijiro/MidiJack
 
-- Example Note/...
-DataConfirm.cs
-新たに追加（MIDIメッセージの確認クラス）
-
-NoteIndicator.cs
-以下を追加
-public float velocity_f = 0.0f;
-
-velocity_f = MidiMaster.GetKey(noteNumber);
-
-- MidiJack/Midi.cs
-#region MIDIメッセージの受取、変換 アウトラインを追加
-
-- MidiJack/MidiDriver.cs
-クラス定義冒頭に以下を追加
-public DataConfirm indic_group = GameObject.FindWithTag("Indicator Group").GetComponent<DataConfirm>();
-
-#region MIDIメッセージの処理（Changed） アウトラインを追加
-whileスコープ内に以下を追加
-  indic_group.data = data.ToString("X");
-
-if (statusCode == 9)スコープ内に以下を追加
-  indic_group.source = message.source.ToString("X");
-  indic_group.status = message.status.ToString("X");
-  indic_group.data1 = message.data1.ToString("X");
-  indic_group.data2 = message.data2.ToString("X");
-
-if (statusCode == 8 || (statusCode == 9 && message.data2 == 0))スコープ内に以下を追加
-  indic_group.status = message.status.ToString("X");

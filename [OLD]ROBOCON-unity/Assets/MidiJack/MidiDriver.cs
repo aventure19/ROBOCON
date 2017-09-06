@@ -144,7 +144,7 @@ namespace MidiJack
             }
         }
 
-        // Message history(Changed)
+        // Message history
         public Queue<MidiMessage> _messageHistory;
 
         public Queue<MidiMessage> History {
