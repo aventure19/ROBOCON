@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Config
   - Mask
+  - Judge
+  - Keyboard
+  - PosSet
   layers:
   - Default
   - TransparentFX
@@ -45,6 +48,12 @@ TagManager:
     locked: 0
   - name: Back
     uniqueID: 3604077717
+    locked: 0
+  - name: Back2
+    uniqueID: 2251947709
+    locked: 0
+  - name: Notes
+    uniqueID: 834785479
     locked: 0
   - name: UI
     uniqueID: 2472580587

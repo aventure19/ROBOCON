@@ -22,7 +22,9 @@ public class ShotParticle_Scale : MonoBehaviour {
 
 		LR.SetPosition(0,transform.parent.position);
 		LR.SetPosition(1,transform.parent.position+V*transform.parent.localScale.z * length);
+#pragma warning disable CS0618 // 型またはメンバーが古い形式です
 		LR.SetWidth(transform.parent.localScale.x * width,transform.parent.localScale.x * width);
+#pragma warning restore CS0618 // 型またはメンバーが古い形式です
 	}
 	
 	// Update is called once per frame
@@ -32,7 +34,9 @@ public class ShotParticle_Scale : MonoBehaviour {
 		
 		LR.SetPosition(0,transform.parent.position);
 		LR.SetPosition(1,transform.parent.position+V*transform.parent.localScale.z * length);
+#pragma warning disable CS0618 // 型またはメンバーが古い形式です
 		LR.SetWidth(transform.parent.localScale.x * width,transform.parent.localScale.x * width);
+#pragma warning restore CS0618 // 型またはメンバーが古い形式です
 
 		width = Mathf.Lerp(width,0,time*time);
 		length += 0.075f*1.5f;

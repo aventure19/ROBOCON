@@ -16,6 +16,8 @@ public class JumpScene : MonoBehaviour {
 	
 	public void ChangeScene(){
 		print("SceneChange:"+scene_index);
-		Application.LoadLevel(scene_index);
-	}
+#pragma warning disable CS0618 // 型またはメンバーが古い形式です
+        Application.LoadLevel(scene_index);
+#pragma warning restore CS0618 // 型またはメンバーが古い形式です
+    }
 }

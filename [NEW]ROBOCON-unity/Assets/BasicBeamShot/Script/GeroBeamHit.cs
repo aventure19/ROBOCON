@@ -15,12 +15,20 @@ public class GeroBeamHit : MonoBehaviour {
 	public void SetViewPat(bool b)
 	{
 		if(b){
+#pragma warning disable CS0618 // 型またはメンバーが古い形式です
 			PatA.emissionRate = PatA_rate;
-			PatB.emissionRate = PatB_rate;
-			HitFlash.GetComponent<Renderer>().enabled = true;
+#pragma warning restore CS0618 // 型またはメンバーが古い形式です
+#pragma warning disable CS0618 // 型またはメンバーが古い形式です
+            PatB.emissionRate = PatB_rate;
+#pragma warning restore CS0618 // 型またはメンバーが古い形式です
+            HitFlash.GetComponent<Renderer>().enabled = true;
 		}else{
-			PatA.emissionRate = 0;
-			PatB.emissionRate = 0;
+#pragma warning disable CS0618 // 型またはメンバーが古い形式です
+            PatA.emissionRate = 0;
+#pragma warning restore CS0618 // 型またはメンバーが古い形式です
+#pragma warning disable CS0618 // 型またはメンバーが古い形式です
+            PatB.emissionRate = 0;
+#pragma warning restore CS0618 // 型またはメンバーが古い形式です
 			HitFlash.GetComponent<Renderer>().enabled = false;
 		}
 	}
@@ -32,19 +40,31 @@ public class GeroBeamHit : MonoBehaviour {
 		ParticleB = transform.FindChild("GeroParticleB").gameObject;
 		HitFlash = transform.FindChild("BeamFlash").gameObject;
 		PatA = ParticleA.gameObject.GetComponent<ParticleSystem>();
-		PatA_rate = PatA.emissionRate;
-		PatA.emissionRate = 0;
+#pragma warning disable CS0618 // 型またはメンバーが古い形式です
+        PatA_rate = PatA.emissionRate;
+#pragma warning restore CS0618 // 型またはメンバーが古い形式です
+#pragma warning disable CS0618 // 型またはメンバーが古い形式です
+        PatA.emissionRate = 0;
+#pragma warning restore CS0618 // 型またはメンバーが古い形式です
 		PatB = ParticleB.gameObject.GetComponent<ParticleSystem>();
+#pragma warning disable CS0618 // 型またはメンバーが古い形式です
 		PatB_rate = PatB.emissionRate;
+#pragma warning restore CS0618 // 型またはメンバーが古い形式です
+#pragma warning disable CS0618 // 型またはメンバーが古い形式です
 		PatB.emissionRate = 0;
+#pragma warning restore CS0618 // 型またはメンバーが古い形式です
 
 		HitFlash.GetComponent<Renderer>().enabled = false;
     }
 	
 	// Update is called once per frame
 	void Update () {
+#pragma warning disable CS0618 // 型またはメンバーが古い形式です
         PatA.startColor = col;
+#pragma warning restore CS0618 // 型またはメンバーが古い形式です
+#pragma warning disable CS0618 // 型またはメンバーが古い形式です
         PatB.startColor = col;
+#pragma warning restore CS0618 // 型またはメンバーが古い形式です
         HitFlash.GetComponent<Renderer>().material.SetColor("_Color", col*1.5f);
     }
 }
