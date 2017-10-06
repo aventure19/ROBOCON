@@ -33,6 +33,12 @@ public class ScoreConfig : MonoBehaviour
     public string fpath = @"C:\Users\owner\Documents\SMFTest\Canon_Score2.txt";
     //"C:\\Users\\owner\\Documents\\SMFTest\\Canon_Score.txt";
 
+    float sinceStart = 0.0f;
+    [SerializeField]
+    float sinceHead = 0.0f;
+    bool flag = true;
+    bool sceneFlag = false;
+
     #endregion
 
     // Start(), Update()が含まれます
@@ -51,8 +57,15 @@ public class ScoreConfig : MonoBehaviour
     {
 
     }
-    #endregion
 
+    void LateUpdate()
+    {
+        OffsetAjust(ref flag);
+
+        GameProcess();
+    }
+    #endregion
+    
     #region Private Methods
 
     #region Fields
@@ -168,8 +181,12 @@ public class ScoreConfig : MonoBehaviour
                             int notesCount = 0;
                             int measureCount = 0;
                             double measureSeconds = (240 / (double)s.BPM) * (s.cbeats / s.mbeats);
-                            //scoreBuffer.Append(sr.ReadToEnd());
-                            s.notes = new Note[Util.CountChar(sr.ReadToEnd(), '|')];
+                            // scoreBuffer.Append(sr.ReadToEnd());
+                            // s.notes = new Note[Util.CountChar(sr.ReadToEnd(), '|')];
+
+                            s.notes = new Note[Util.CountString(sr.ReadToEnd(), "ON:")];
+                            sr.BaseStream.Seek(0, SeekOrigin.Begin);
+                            s.se = new ScoreEffect[Util.CountStrings(sr.ReadToEnd(), "END:")];
                             sr.BaseStream.Seek(0, SeekOrigin.Begin);
                             #endregion
 
@@ -187,48 +204,65 @@ public class ScoreConfig : MonoBehaviour
                             {
                                 buffer = sr.ReadLine();
 
+                                // ノートデータを見つけた
                                 if (buffer.IndexOf(":") >= 0)
                                 {
                                     data = buffer.Split(':');
 
-                                    // キーを取得
-                                    int scale = 0;
-                                    int octave = int.Parse(data[1].Substring(1)) * 12;
-                                    switch (data[1].Substring(0, 1))
+                                    // 頭のデータで条件分岐
+                                    switch (data[0])
                                     {
-                                        case "A":
-                                            scale = 9;
+                                        case "ON":
+                                            // キーを取得
+                                            int scale = 0;
+                                            int octave = int.Parse(data[1].Substring(1)) * 12;
+                                            switch (data[1].Substring(0, 1))
+                                            {
+                                                case "A":
+                                                    scale = 9;
+                                                    break;
+                                                case "B":
+                                                    scale = 11;
+                                                    break;
+                                                case "C":
+                                                    scale = 0;
+                                                    break;
+                                                case "D":
+                                                    scale = 2;
+                                                    break;
+                                                case "E":
+                                                    scale = 4;
+                                                    break;
+                                                case "F":
+                                                    scale = 5;
+                                                    break;
+                                                case "G":
+                                                    scale = 7;
+                                                    break;
+                                                default:
+                                                    break;
+                                            }
+                                            s.notes[notesCount].key = scale + octave;
+
+                                            // スタートタイム、エンドタイム取得、計算
+                                            double startTime = double.Parse(data[2].Split(' ')[0]);
+                                            double endTime = double.Parse(data[2].Split(' ')[1]);
+                                            s.notes[notesCount].start = (240 / (double)s.BPM) * (startTime / s.delta) + (measureCount - 1) * measureSeconds;
+                                            s.notes[notesCount].end = (240 / (double)s.BPM) * (endTime / s.delta) + (measureCount - 1) * measureSeconds;
+
+                                            notesCount++;
                                             break;
-                                        case "B":
-                                            scale = 11;
-                                            break;
-                                        case "C":
-                                            scale = 0;
-                                            break;
-                                        case "D":
-                                            scale = 2;
-                                            break;
-                                        case "E":
-                                            scale = 4;
-                                            break;
-                                        case "F":
-                                            scale = 5;
-                                            break;
-                                        case "G":
-                                            scale = 7;
+
+                                        case "END":
+                                            Debug.Log("hoge");
+                                            double dummyTiming = double.Parse(data[1]);
+                                            double Timing = (240 / (double)s.BPM) * (dummyTiming / s.delta) + (measureCount - 1) * measureSeconds;
+                                            s.se[0].et = EffectType.End;
+                                            s.se[0].timing = (float)Timing + (float)s.offset / 1000;
                                             break;
                                         default:
                                             break;
                                     }
-                                    s.notes[notesCount].key = scale + octave;
-
-                                    // スタートタイム、エンドタイム取得、計算
-                                    double startTime = double.Parse(data[2].Split(' ')[0]);
-                                    double endTime = double.Parse(data[2].Split(' ')[1]);
-                                    s.notes[notesCount].start = (240 / (double)s.BPM) * (startTime / s.delta) + (measureCount - 1) * measureSeconds;
-                                    s.notes[notesCount].end = (240 / (double)s.BPM) * (endTime / s.delta) + (measureCount - 1) * measureSeconds;
-
-                                    notesCount++;
                                 }
 
                                 if (buffer.IndexOf("/M") >= 0)
@@ -272,7 +306,10 @@ public class ScoreConfig : MonoBehaviour
     {
         Transform JudgeLine = GameObject.FindWithTag("Judge").transform;
         Transform Keyboard = GameObject.FindWithTag("Keyboard").transform;
-        GameObject leaderP = Instantiate(leader, new Vector3(0, ((float)s.offset / 1000) * HS, 0), Quaternion.identity);
+        GameObject leaderP = Instantiate(
+            leader,
+            JudgeLine.transform.position/*new Vector3(0, ((float)s.offset / 1000) * HS, 0)*/,
+            Quaternion.identity);
 
         for (int i = 0; i < s.notes.Length; i++)
         {
@@ -302,16 +339,54 @@ public class ScoreConfig : MonoBehaviour
 
         return 0;
     }
+
+    /// <summary>
+    /// オフセットに合わせて譜面の位置を調整
+    /// </summary>
+    /// <param name="flag"></param>
+    void OffsetAjust(ref bool flag)
+    {
+        GameObject leader = GameObject.FindWithTag("Leader");
+        if (flag)
+        {
+            if (sinceStart >= (float)s.offset / 1000)
+            {
+                leader.GetComponent<NotesLeader>().enabled = true;
+                flag = false;
+                sceneFlag = true;
+                return;
+            }
+
+            leader.transform.Translate(Vector3.up * Time.deltaTime * HS);
+
+            sinceStart += Time.fixedDeltaTime;
+        }
+    }
+
+    /// <summary>
+    /// 演奏中の各種効果や打鍵時の判定処理を行います
+    /// </summary>
+    void GameProcess()
+    {
+        if (sceneFlag)
+        {
+            int i = 0;
+            
+            sinceHead += Time.fixedDeltaTime;
+            
+            if(sinceHead >= s.se[i].timing)
+            {
+                switch (s.se[i].et)
+                {
+                    case EffectType.End:
+                        Util.JumpScene("Result");
+                        sceneFlag = false;
+                        break;
+                }
+
+                i++;
+            }
+        }
+    }
     #endregion
 }
-
-//                                data = buffer.Split('|');
-
-//                                for (int i = 0; i<data.Length; i++, count++)
-//                                {
-//                                    int startTime = int.Parse(data[i].Split(':')[2].Split(' ')[0]);
-//int endTime = int.Parse(data[i].Split(':')[2].Split(' ')[1]);
-//s.notes[count].key = int.Parse(data[i].Split(':')[1]);
-//                                    s.notes[count].start = ((startTime / s.delta) + (measureCount - 1)) * measureSeconds;
-//s.notes[count].end = ((endTime / s.delta) + (measureCount - 1)) * measureSeconds;
-//                                }

@@ -43,7 +43,7 @@ RenderSettings:
 LightmapSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 9
-  m_GIWorkflowMode: 1
+  m_GIWorkflowMode: 0
   m_GISettings:
     serializedVersion: 2
     m_BounceScale: 1
@@ -201,6 +201,14 @@ Prefab:
       propertyPath: m_TagString
       value: Judge
       objectReference: {fileID: 0}
+    - target: {fileID: 4574613190064846, guid: 8c03aa2f8999cf54f94e4aeafe898b15, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1604913115493828, guid: 8c03aa2f8999cf54f94e4aeafe898b15, type: 2}
+      propertyPath: m_Name
+      value: Pivot
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 8c03aa2f8999cf54f94e4aeafe898b15, type: 2}
   m_IsPrefabParent: 0
@@ -279,6 +287,10 @@ Prefab:
         type: 2}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1475818022834006, guid: ef823da2ebaabab41977f51ab8e9df40, type: 2}
+      propertyPath: m_TagString
+      value: GameController
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 114998490973115468, guid: ef823da2ebaabab41977f51ab8e9df40, type: 2}
@@ -1702,6 +1714,11 @@ Transform:
   m_PrefabParentObject: {fileID: 4155546108027720, guid: 44c4648e1c5bd4546b59b21b53334df6,
     type: 2}
   m_PrefabInternal: {fileID: 302035035}
+--- !u!4 &1093368032 stripped
+Transform:
+  m_PrefabParentObject: {fileID: 4574613190064846, guid: 8c03aa2f8999cf54f94e4aeafe898b15,
+    type: 2}
+  m_PrefabInternal: {fileID: 150408467}
 --- !u!1001 &1140908327
 Prefab:
   m_ObjectHideFlags: 0
@@ -1769,7 +1786,7 @@ MonoBehaviour:
   - mid
   - midi
   - smf
-  HS: 2
+  HS: 10
   s:
     MusicName: 
     inst: 
@@ -1781,6 +1798,9 @@ MonoBehaviour:
     offset: 0
     measure: 0
     notes: []
+  se:
+  - et: 0
+    timing: 0
   receiver: {fileID: 1140908328}
   leader: {fileID: 1334652877298992, guid: c97b870940f820e49826d0b391799f2c, type: 2}
   note: {fileID: 1687615134171164, guid: 9e5f7ad8e2c02aa478fd8620b1505cd1, type: 2}
@@ -1930,6 +1950,75 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 68278f1121c68d24fae5932c9458fcf0, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &1441366513
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1441366515}
+  - component: {fileID: 1441366514}
+  - component: {fileID: 1441366516}
+  - component: {fileID: 1441366517}
+  m_Layer: 0
+  m_Name: Deadline
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &1441366514
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1441366513}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 30, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &1441366515
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1441366513}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -10, z: 0}
+  m_LocalScale: {x: 0.13221276, y: 2, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1093368032}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1441366516
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1441366513}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bde8de4f84eb3b2439184f4e0feb8ae7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!54 &1441366517
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1441366513}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0
 --- !u!1001 &1572845909
 Prefab:
   m_ObjectHideFlags: 0

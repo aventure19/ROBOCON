@@ -2,22 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NotesLeader : MonoBehaviour {
+public class NotesLeader : MonoBehaviour
+{
 
-    private ScoreConfig sc;
+    private ScoreConfig scf;
 
-	// Use this for initialization
-	void Start () {
-        sc = GameObject.FindWithTag("Config").GetComponent<ScoreConfig>();
-	}
-	
-	// Update is called once per frame
-	void Update () {
-        PositionUpdate();
-	}
-
-    void PositionUpdate()
+    // Use this for initialization
+    void Start()
     {
-        transform.position += Vector3.down * Time.deltaTime * sc.HS;
+        scf = GameObject.FindWithTag("Config").GetComponent<ScoreConfig>();
+    }
+
+    // Update is called once per frame
+    void FixedUpdate()
+    {
+        PositionUpdate();
+    }
+
+    public void PositionUpdate(int dir = 1)
+    {
+        transform.Translate(Vector3.down * Time.deltaTime * scf.HS * dir);
     }
 }

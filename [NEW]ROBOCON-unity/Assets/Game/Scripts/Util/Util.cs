@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Util : MonoBehaviour
 {
@@ -46,6 +47,23 @@ public class Util : MonoBehaviour
         return s.Length - s.Replace(c.ToString(), "").Length;
     }
 
+    public static int CountString(string s, string sentence)
+    {
+        return (s.Length - s.Replace(sentence, "").Length) / sentence.Length;
+    }
+
+    public static int CountStrings(string s, params string[] sentences)
+    {
+        int[] countS = new int[sentences.Length];
+        int i = 0;
+        foreach(string S in sentences)
+        {
+            countS[i] = (s.Length - s.Replace(S, "").Length) / S.Length;
+            i++;
+        }
+        return countS.Sum();
+    }
+
     public static int textSave(string txt)
     {
         using (StreamWriter sw = new StreamWriter(@"C:\Users\owner\Documents\UnityLog.txt", false) /*true=追記 false=上書き*/ )
@@ -56,6 +74,11 @@ public class Util : MonoBehaviour
 
         }
         return 0;
+    }
+
+    public static void JumpScene(string sceneName)
+    {
+        SceneManager.LoadScene(sceneName);
     }
     #endregion
 }
@@ -100,6 +123,22 @@ public struct Note
 }
 
 /// <summary>
+/// 譜面のBPM変化、曲終了などを実装します
+/// </summary>
+[Serializable]
+public struct ScoreEffect
+{
+    public EffectType et;
+    public float timing;
+
+    //public ScoreEffect(EffectType Et, float Timing)
+    //{
+    //    et = Et;
+    //    timing = Timing;
+    //}
+}
+
+/// <summary>
 /// 譜面のヘッダ情報を構成する構造体です
 /// </summary>
 [Serializable]
@@ -115,6 +154,7 @@ public struct Score
     public int offset;	    // 最初の小節までの時間
     public double measure;  // (60 * (CBeats / MBewats)) / BPM
     public Note[] notes;    // ノーツ。ScoreConfigでRenewする
+    public ScoreEffect[] se;// 譜面の効果。ScoreConfigでRenew
 }
 
 /// <summary>
@@ -145,7 +185,7 @@ public struct ScoreContext
 
 #endregion
 
-#region Enums
+#region Public Enums
 
 /// <summary>
 /// オクターブモードの設定
@@ -157,4 +197,9 @@ public enum OctaveConfig
     Five_Octaves
 }
 
+public enum EffectType
+{
+    End,
+    Test
+}
 #endregion

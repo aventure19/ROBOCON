@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 using System;
 using UnityEngine;
+using UnityEditor;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// 演奏シーンのゲーム進行を実装します
@@ -48,7 +50,6 @@ public class GameMaster : MonoBehaviour
     {
 
     }
-
     #endregion
 
 

@@ -9,6 +9,9 @@ TagManager:
   - Judge
   - Keyboard
   - PosSet
+  - Leader
+  - Deadline
+  - Note
   layers:
   - Default
   - TransparentFX
@@ -18,7 +21,7 @@ TagManager:
   - UI
   - 
   - 
-  - 
+  - Note
   - 
   - 
   - 
