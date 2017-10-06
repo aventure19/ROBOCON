@@ -20,6 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4936731857207302}
   - component: {fileID: 114341415841718844}
+  - component: {fileID: 114360370122154376}
   m_Layer: 0
   m_Name: GameConfigs
   m_TagString: Config
@@ -51,6 +52,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52908b969c4fe364396fb2c701671141, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LowestKey: 21
-  HighestKey: 108
+  lowestKey: 21
+  highestKey: 108
+  lowestKeyPosition: -13.18
+  highestKeyPosition: 12.97
   KeyCollectionLength: 88
+--- !u!114 &114360370122154376
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1827798811295696}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34ec3c1ec31e95b499ebc8474ba1bc3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AvailableExtension:
+  - mid
+  - midi
+  - smf
+  HS: 10
+  s:
+    MusicName: 
+    inst: 
+    BPM: 0
+    cbeats: 0
+    mbeats: 0
+    delta: 0
+    otp: 0
+    offset: 0
+    measure: 0
+    notes: []
+    se: []
+  receiver: {fileID: 1827798811295696}
+  leader: {fileID: 1334652877298992, guid: c97b870940f820e49826d0b391799f2c, type: 2}
+  note: {fileID: 1687615134171164, guid: 9e5f7ad8e2c02aa478fd8620b1505cd1, type: 2}
+  fpath: C:\Users\owner\Documents\SMFTest\Canon_Score2.txt
+  sinceHead: 0

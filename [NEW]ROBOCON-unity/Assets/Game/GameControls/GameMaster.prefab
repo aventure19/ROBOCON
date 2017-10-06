@@ -19,10 +19,10 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4446377529456022}
-  - component: {fileID: 114998490973115468}
+  - component: {fileID: 114776928708847050}
   m_Layer: 0
   m_Name: GameMaster
-  m_TagString: Untagged
+  m_TagString: GameController
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -40,7 +40,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114998490973115468
+--- !u!114 &114776928708847050
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -48,9 +48,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 1475818022834006}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7028abbf09dee8446942816dc6592200, type: 3}
+  m_Script: {fileID: 11500000, guid: 48c8a01100dcd2c409d2f555faace867, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  blf: []
-  sr: []
-  KeyCollectionLength: 88
+  kc: []
+  keyboardVisual: {fileID: 0}
