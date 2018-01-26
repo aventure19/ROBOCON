@@ -72,7 +72,7 @@ MonoBehaviour:
   - mid
   - midi
   - smf
-  HS: 10
+  HS: 3.5
   s:
     MusicName: 
     inst: 
@@ -88,5 +88,9 @@ MonoBehaviour:
   receiver: {fileID: 1827798811295696}
   leader: {fileID: 1334652877298992, guid: c97b870940f820e49826d0b391799f2c, type: 2}
   note: {fileID: 1687615134171164, guid: 9e5f7ad8e2c02aa478fd8620b1505cd1, type: 2}
-  fpath: C:\Users\owner\Documents\SMFTest\Canon_Score2.txt
+  measure:
+  - {fileID: 1213435475185102, guid: e97557862a01b2c49a509077609ada25, type: 2}
+  - {fileID: 1713786448273624, guid: d42a1089d92b9a34eb8366653dbe5407, type: 2}
+  beat: {fileID: 1376468481984310, guid: 79044500e78cfbb4a85e66a49519d830, type: 2}
+  fpath: ./Assets/Game/Scores/Canon_Score2.txt
   sinceHead: 0

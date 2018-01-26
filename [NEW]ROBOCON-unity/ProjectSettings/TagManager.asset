@@ -14,6 +14,10 @@ TagManager:
   - Note
   - Bullet
   - NoBulletHit
+  - Measure_M
+  - Measure_B
+  - Metronome
+  - DataStore
   layers:
   - Default
   - TransparentFX
@@ -65,4 +69,7 @@ TagManager:
     locked: 0
   - name: UI2
     uniqueID: 3169398483
+    locked: 0
+  - name: Mask
+    uniqueID: 3715564629
     locked: 0

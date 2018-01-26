@@ -26,7 +26,7 @@ class MidiReceiverEditor : Editor
             // Incomming messages.
             temp = "Incoming MIDI messages:";
             foreach (var message in (target as MidiReceiver).History) {
-                if(message.ToString().IndexOf("s(FE)") == -1)
+                if(message.ToString().IndexOf("s(FE)") == -1 && message.ToString().IndexOf("s(F8)") == -1)
                 temp += "\n" + message.ToString ();
             }
             EditorGUILayout.HelpBox (temp, MessageType.None);

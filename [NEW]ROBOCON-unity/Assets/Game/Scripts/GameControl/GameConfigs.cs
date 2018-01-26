@@ -15,25 +15,10 @@ public class GameConfigs : MonoBehaviour
 
     public int KeyCollectionLength = 88;
     #endregion
-
-    // Start(), Update()が含まれます
-    //
-    #region Process
-    /// <summary>
-    /// Use this for initialization
-    /// </summary>
+   
     void Start()
     {
         KeyCollectionLength = highestKey - lowestKey + 1;
-        DontDestroyOnLoad(gameObject);
-    }
-
-    /// <summary>
-    /// Update is called once per frame
-    /// </summary>
-    void Update()
-    {
-
-    }
-    #endregion
+        DontDestroyOnLoad(this.gameObject);
+    } 
 }

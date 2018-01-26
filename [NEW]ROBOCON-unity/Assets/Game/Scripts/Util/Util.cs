@@ -80,6 +80,11 @@ public class Util : MonoBehaviour
     {
         SceneManager.LoadScene(sceneName);
     }
+
+    public void JumpScene_dynamic(string sceneName)
+    {
+        SceneManager.LoadScene(sceneName);
+    }
     #endregion
 }
 
@@ -197,9 +202,23 @@ public enum OctaveConfig
     Five_Octaves
 }
 
+/// <summary>
+/// 譜面生成スクリプトで使用
+/// </summary>
 public enum EffectType
 {
     End,
     Test
+}
+
+/// <summary>
+/// 譜面の速さを設定します
+/// </summary>
+[Serializable]
+public enum SpeedType
+{
+    Default,
+    Half,
+    Third
 }
 #endregion

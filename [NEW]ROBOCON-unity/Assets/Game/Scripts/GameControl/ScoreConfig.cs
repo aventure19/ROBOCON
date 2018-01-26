@@ -12,7 +12,6 @@ using System.Text;
 /// </summary>
 public class ScoreConfig : MonoBehaviour
 {
-
     #region Fields
     [HideInInspector]
     public string[] AvailableExtension = { "mid", "midi", "smf" };
@@ -22,22 +21,24 @@ public class ScoreConfig : MonoBehaviour
     [SerializeField]
     Score s;
     [SerializeField]
-    ScoreContext sc = new ScoreContext("*HEADER*", "*HEADER_END*", "NAME=", "BPM=",
-                "OFFSET=", "MBEATS=", "CBEATS=", "DELTA=", "INST=", "OTP=", "*SCORE*", "*SCORE_END*");
+    ScoreContext sc;
 
     public GameObject receiver;
 
     public GameObject leader;
     public GameObject note;
+    public GameObject[] measure;
+    public GameObject beat;
 
-    public string fpath = @"C:\Users\owner\Documents\SMFTest\Canon_Score2.txt";
-    //"C:\\Users\\owner\\Documents\\SMFTest\\Canon_Score.txt";
+    public string fpath;
 
     float sinceStart = 0.0f;
     [SerializeField]
     float sinceHead = 0.0f;
     bool flag = true;
     bool sceneFlag = false;
+
+    private DataStore ds;
 
     #endregion
 
@@ -47,6 +48,17 @@ public class ScoreConfig : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        try
+        {
+            ds = GameObject.FindWithTag("DataStore").GetComponent<DataStore>();
+        }
+        catch (NullReferenceException)
+        {
+
+        }
+        if (ds)
+            fpath = ds.musicFilePath;
+
         receiver.SendMessage("ScoreConfigProcess", fpath);
 
         receiver.SendMessage("ScoreInstantiate");
@@ -65,7 +77,7 @@ public class ScoreConfig : MonoBehaviour
         GameProcess();
     }
     #endregion
-    
+
     #region Private Methods
 
     #region Fields
@@ -133,6 +145,19 @@ public class ScoreConfig : MonoBehaviour
                                 while (buffer.IndexOf(sc.bpm) < 0)
                                     buffer = sr.ReadLine();
                                 s.BPM = int.Parse(buffer.Trim(sc.bpm.ToCharArray()).Trim());
+                                switch (ds.st)
+                                {
+                                    case SpeedType.Half:
+                                        s.BPM /= 2;
+                                        break;
+                                    case SpeedType.Third:
+                                        s.BPM /= 3;
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                
+
 
                                 // OFFSETまで読み飛ばし、代入
                                 while (buffer.IndexOf(sc.offset) < 0)
@@ -172,7 +197,8 @@ public class ScoreConfig : MonoBehaviour
                         }
                         #endregion
 
-                        #region Score
+                        #region SCORE
+
                         // エントリー
                         if (buffer.IndexOf(sc.score) >= 0)
                         {
@@ -215,7 +241,19 @@ public class ScoreConfig : MonoBehaviour
                                         case "ON":
                                             // キーを取得
                                             int scale = 0;
-                                            int octave = int.Parse(data[1].Substring(1)) * 12;
+                                            int octave = 12;
+                                            bool isAccidental = false;
+
+                                            try
+                                            {
+                                                octave = int.Parse(data[1].Substring(1)) * 12;
+                                            }
+                                            catch (Exception)
+                                            {
+                                                isAccidental = true;
+                                                octave = int.Parse(data[1].Substring(2, 1)) * 12;
+                                            }
+
                                             switch (data[1].Substring(0, 1))
                                             {
                                                 case "A":
@@ -242,6 +280,22 @@ public class ScoreConfig : MonoBehaviour
                                                 default:
                                                     break;
                                             }
+                                            if (isAccidental)
+                                            {
+                                                switch (data[1].Substring(1, 1))
+                                                {
+                                                    case "#":
+                                                        scale++;
+                                                        Debug.Log("#");
+                                                        break;
+                                                    case "♭":
+                                                        scale--;
+                                                        break;
+                                                    default:
+                                                        break;
+                                                }   
+                                            }
+
                                             s.notes[notesCount].key = scale + octave;
 
                                             // スタートタイム、エンドタイム取得、計算
@@ -265,8 +319,11 @@ public class ScoreConfig : MonoBehaviour
                                     }
                                 }
 
+                                // 小節の区切り
                                 if (buffer.IndexOf("/M") >= 0)
+                                {
                                     measureCount++;
+                                }
 
                                 // スコア終了後、ループから抜ける
                                 if (buffer.IndexOf(sc.score_end) >= 0)
@@ -328,12 +385,68 @@ public class ScoreConfig : MonoBehaviour
                 );
         }
 
+        // 小節線
+        for (int i = 0; i < 200; i++)
+        {
+            Vector3 v = new Vector3(0.0f,
+                leaderP.transform.position.y + (i * (240 / (float)s.BPM) * (s.cbeats / s.mbeats)),
+                0.0f);
+
+            GameObject barP = Instantiate(measure[0], Vector3.zero, Quaternion.identity);
+            barP.transform.position = v;
+            barP.transform.SetParent(leaderP.transform, true);
+
+            GameObject BeatP = Instantiate(beat, Vector3.left, Quaternion.identity);
+            BeatP.transform.SetParent(barP.transform, false);
+            BeatP.transform.localScale = new Vector3(
+                    BeatP.transform.localScale.x / BeatP.transform.parent.lossyScale.x,
+                    BeatP.transform.localScale.y / BeatP.transform.parent.lossyScale.y,
+                    BeatP.transform.localScale.z / BeatP.transform.parent.lossyScale.z
+                    );
+            BeatP.GetComponent<TextMesh>().text = (i + 1).ToString();
+        }
+
+        // 拍線
+        for (int i = 0; i < 200 * s.mbeats; i++)
+        {
+            if (i % s.cbeats != 0)
+            {
+                Vector3 v = new Vector3(0.0f,
+                    leaderP.transform.position.y + (i * (240 / (float)s.BPM) / s.cbeats),
+                    0.0f);
+
+                GameObject barP = Instantiate(measure[1], Vector3.zero, Quaternion.identity);
+                barP.transform.position = v;
+                barP.transform.SetParent(leaderP.transform, true);
+            }
+        }
+
         leaderP.transform.localScale = new Vector3(
             leaderP.transform.localScale.x,
             leaderP.transform.localScale.y * HS,
             leaderP.transform.localScale.z
             );
 
+        {
+            GameObject[] bars = GameObject.FindGameObjectsWithTag("Measure_M");
+            GameObject[] bars_2 = GameObject.FindGameObjectsWithTag("Measure_B");
+            foreach (GameObject go in bars)
+            {
+                go.transform.localScale = new Vector3(
+                    go.transform.localScale.x,
+                    go.transform.localScale.y / go.transform.parent.lossyScale.y,
+                    go.transform.localScale.z
+                    );
+            }
+            foreach (GameObject go in bars_2)
+            {
+                go.transform.localScale = new Vector3(
+                    go.transform.localScale.x,
+                    go.transform.localScale.y / go.transform.parent.lossyScale.y,
+                    go.transform.localScale.z
+                    );
+            }
+        }
         //leaderP.SendMessage("FirstValuesSet");
         //leaderP.GetComponent<ChildsScaleLocalizer>().flag = true;
 
@@ -371,21 +484,21 @@ public class ScoreConfig : MonoBehaviour
         if (sceneFlag)
         {
             int i = 0;
-            
-            sinceHead += Time.fixedDeltaTime;
-            
-            if(sinceHead >= s.se[i].timing)
-            {
-                switch (s.se[i].et)
-                {
-                    case EffectType.End:
-                        Util.JumpScene("Result");
-                        sceneFlag = false;
-                        break;
-                }
 
-                i++;
-            }
+            sinceHead += Time.fixedDeltaTime;
+
+            //if (sinceHead >= s.se[i].timing + 18.0f)
+            //{
+            //    switch (s.se[i].et)
+            //    {
+            //        case EffectType.End:
+            //            Util.JumpScene("Result");
+            //            sceneFlag = false;
+            //            break;
+            //    }
+
+            //    i++;
+            //}
         }
     }
     #endregion

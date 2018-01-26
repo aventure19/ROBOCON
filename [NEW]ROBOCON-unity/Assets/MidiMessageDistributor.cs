@@ -26,7 +26,7 @@ public class MidiMessageDistributor : MonoBehaviour
             #region 打鍵処理
 
             // ステータスが90(Note On)なら
-            if (message.status == 0x90)
+            if (message.status == 0x90 && message.data2 != 0x00)
             {
                 foreach (var go in targets)
                 {

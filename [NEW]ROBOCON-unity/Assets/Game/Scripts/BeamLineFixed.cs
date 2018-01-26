@@ -1,85 +1,36 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class BeamLineFixed : MonoBehaviour {
+public class BeamLineFixed : MonoBehaviour
+{
+    private SpriteRenderer sr;
+    public float endScaleX;
+    public float endScaleY;
 
-    public bool flag = false;
-    public float MaxLength = 1.0f;
-	public float StartSize = 1.0f;
-	public float AnimationSpd = 0.1f;
-	public Color BeamColor = Color.white;
-
-	private float NowAnm;
-	private LineRenderer line;
-
-	private float NowLength;
-
-	private bool bStop;
+    public float speed;
+    private int fixedFPS = 50;
 
     // Use this for initialization
-    void Start () {
-		line = GetComponent<LineRenderer>();
-#pragma warning disable CS0618 // 型またはメンバーが古い形式です
-		line.SetColors(BeamColor,BeamColor);
-#pragma warning restore CS0618 // 型またはメンバーが古い形式です
-		NowAnm = 0;
-		NowLength = 0;
-		bStop = false;
-		LineFunc();
-	}
-	
-	// Update is called once per frame
-	void Update () {
-
-		NowAnm+=AnimationSpd;
-
-        if (NowAnm <= 1.0)
-        {
-            LineFunc();
-        }
-
-		if(NowAnm > 1.0)
-		{
-            bStop = true;
-            LineFuncAfter();
-		}
-
-	}
-
-    public float GetNowLength()
+    void Start()
     {
-        return NowLength;
     }
 
-    public void StopLength(float length)
+    // Update is called once per frame
+    void Update()
     {
-        NowLength = length;
-        bStop = true;
+
     }
 
-    void LineFunc()
+    void FixedUpdate()
     {
-        if (!bStop)
-            NowLength = Mathf.Lerp(0, MaxLength, NowAnm);
-        float width = Mathf.Lerp(StartSize, 0, NowAnm);
-#pragma warning disable CS0618 // 型またはメンバーが古い形式です
-        line.SetWidth(width, width);
-#pragma warning restore CS0618 // 型またはメンバーが古い形式です
-        float length = NowLength;
-        line.SetPosition(0, transform.position);
-        line.SetPosition(1, transform.position + (transform.forward * length));
+        Animation();
     }
 
-    void LineFuncAfter()
+    void Animation()
     {
-        if (bStop)
-            NowLength = Mathf.Lerp(0, MaxLength, NowAnm);
-        float width = Mathf.Lerp(StartSize, 0, NowAnm);
-#pragma warning disable CS0618 // 型またはメンバーが古い形式です
-        line.SetWidth(width, width);
-#pragma warning restore CS0618 // 型またはメンバーが古い形式です
-        float length = NowLength;
-        line.SetPosition(0, transform.position);
-        line.SetPosition(1, transform.position + (transform.forward * length));
+        if (transform.localScale.x < endScaleX)
+            transform.localScale += new Vector3(1.0f, 0, 0) * speed;
+        if (transform.localScale.x < endScaleY)
+            transform.localScale += new Vector3(0, 1.0f, 0) * speed;
     }
 }
